@@ -3,446 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ovzli habar → Matin | So‘zli xabar</title>
+    <title>Ovozli Matn Generator</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, #f0f2f5 0%, #e0e5ec 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .card {
-            max-width: 800px;
-            width: 100%;
-            background: #f8faff;
-            border-radius: 42px;
-            box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -20px -20px 40px rgba(255,255,255,0.7);
-            padding: 40px 35px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.5);
-            backdrop-filter: blur(2px);
-        }
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #1a2639;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-            border-bottom: 3px dashed #9aa9c0;
-            padding-bottom: 18px;
-        }
-        h1 span {
-            background: #2d3b57;
-            color: white;
-            font-size: 1.4rem;
-            padding: 8px 16px;
-            border-radius: 60px;
-            letter-spacing: 1px;
-            box-shadow: inset 0 -3px 0 #0f1a2f;
-        }
-        .sub {
-            color: #3a4a66;
-            margin-bottom: 32px;
-            font-size: 1.1rem;
-            font-weight: 400;
-            padding-left: 12px;
-            border-left: 6px solid #5f7daf;
-            background: rgba(95, 125, 175, 0.08);
-            border-radius: 0 12px 12px 0;
-            line-height: 1.5;
-        }
-        .textarea-container {
-            position: relative;
-            margin-bottom: 28px;
-        }
-        textarea {
-            width: 100%;
-            height: 170px;
-            padding: 25px 25px 20px 25px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            background: #eef2f9;
-            border: none;
-            border-radius: 32px;
-            box-shadow: inset 8px 8px 16px #c8cdd6, inset -8px -8px 16px #ffffff;
-            color: #0d1b2b;
-            resize: vertical;
-            transition: box-shadow 0.2s, background 0.2s;
-            font-weight: 450;
-            outline: none;
-            border: 2px solid transparent;
-        }
-        textarea:focus {
-            box-shadow: inset 6px 6px 12px #b5bcc9, inset -6px -6px 12px #ffffff, 0 0 0 3px #a0b5da;
-            background: #f0f5ff;
-        }
-        .char-hint {
-            position: absolute;
-            bottom: 12px;
-            right: 25px;
-            background: rgba(45, 59, 87, 0.2);
-            backdrop-filter: blur(4px);
-            padding: 4px 14px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            color: #1f2b3f;
-            font-weight: 500;
-            letter-spacing: 0.3px;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 18px;
-            margin: 30px 0 30px;
-            justify-content: center;
-        }
-        .btn {
-            border: none;
-            background: #e6ecf5;
-            padding: 18px 30px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 60px;
-            color: #1e2b41;
-            box-shadow: 9px 9px 18px #b0b8c5, -9px -9px 18px #ffffff;
-            cursor: pointer;
-            transition: 0.15s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            min-width: 190px;
-            flex: 1 1 auto;
-            border: 1px solid rgba(255,255,255,0.7);
-        }
-        .btn-primary {
-            background: #2d3f60;
-            color: white;
-            box-shadow: 9px 9px 18px #a1aabe, -9px -9px 18px #ffffff;
-        }
-        .btn-primary:hover {
-            background: #1f2e4a;
-            box-shadow: 5px 5px 12px #959eaf, -5px -5px 12px #ffffff;
-            transform: scale(0.98);
-        }
-        .btn:hover {
-            background: #d9e2f0;
-            box-shadow: 5px 5px 12px #959eaf, -5px -5px 12px #ffffff;
-            transform: scale(0.98);
-        }
-        .btn-primary:hover {
-            background: #1f2e4a;
-        }
-        .output-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
-            margin-top: 15px;
-        }
-        .output-header h2 {
-            font-size: 1.8rem;
-            font-weight: 500;
-            color: #1b253b;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .output-header h2 i {
-            font-size: 2rem;
-            font-style: normal;
-            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.1));
-        }
-        .chip {
-            background: #27334b;
-            color: white;
-            padding: 7px 22px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            box-shadow: inset 0 -2px 0 #0b1422;
-        }
-        .message-box {
-            background: #eef2f5;
-            border-radius: 38px;
-            padding: 28px 30px;
-            box-shadow: inset 6px 6px 12px #cbd1db, inset -8px -8px 16px #ffffff;
-            min-height: 140px;
-            font-size: 1.3rem;
-            line-height: 1.7;
-            color: #102331;
-            word-break: break-word;
-            white-space: pre-wrap;
-            border: 2px solid rgba(255,255,255,0.6);
-            transition: background 0.2s;
-            margin-bottom: 10px;
-            font-weight: 450;
-        }
-        .message-box:empty::before {
-            content: "📭 Matin hali yo‘q. Yuqoridagi maydonga habar yozib «Matin qil»ni bosing.";
-            color: #6c7c9b;
-            font-style: italic;
-            font-size: 1.1rem;
-        }
-        .status-note {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            color: #38507c;
-            background: rgba(80, 120, 190, 0.1);
-            border-radius: 60px;
-            padding: 10px 20px;
-            margin-top: 18px;
-            border: 1px dashed #7d93b9;
-        }
-        .footer-copy {
-            text-align: center;
-            margin-top: 30px;
-            color: #3f4d69;
-            font-size: 0.95rem;
-            font-weight: 400;
-            opacity: 0.75;
-        }
-        .btn-copy {
-            background: #cdd9ed;
-            padding: 10px 22px;
-            font-size: 1rem;
-            border-radius: 40px;
-            border: none;
-            box-shadow: 5px 5px 10px #b3bcca, -5px -5px 10px #ffffff;
-            cursor: pointer;
-            transition: all 0.1s;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-copy:hover {
-            background: #bcccdf;
-            transform: scale(0.96);
-        }
-        .row-flex {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f7f6; }
+        .container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        h2 { color: #333; }
+        #status { margin-bottom: 10px; font-weight: bold; color: #555; }
+        #result { width: 100%; height: 150px; border: 2px border-radius: 8px; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; font-size: 16px; resize: none; }
+        button { background-color: #4CAF50; color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #45a049; }
+        button.recording { background-color: #f44336; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
-    <div class="card" role="main">
-        <h1>
-            <span>📨 Ovzli habar</span> 
-            → Matin
-        </h1>
-        <div class="sub">
-            ✍️ Istalgan matnli xabarni kiriting — “Matin qil” tugmasi uni to‘liq matn shaklida qabul qiladi.
-        </div>
 
-        <!-- KIRITISH MAYONI -->
-        <div class="textarea-container">
-            <textarea id="inputMessage" placeholder="Misol: Salom, ishlar qalay? Uchrashamizmi?" aria-label="Ovzli habar matni">Assalomu alaykum! Bu sinov xabari. O‘zbekcha matn to‘liq saqlanadi.</textarea>
-            <div class="char-hint" id="charCount">34 belgi</div>
-        </div>
+<div class="container">
+    <h2>Ovozni matnga aylantirish</h2>
+    <div id="status">Tugmani bosing va gapiring</div>
+    <textarea id="result" placeholder="Sizning matningiz bu yerda paydo bo'ladi..."></textarea>
+    <button id="start-btn">Ovozni yozishni boshlash</button>
+</div>
 
-        <!-- TUGMALAR -->
-        <div class="actions">
-            <button class="btn" id="clearBtn" title="Maydonni tozalash">
-                <span>🗑️</span> Tozalash
-            </button>
-            <button class="btn btn-primary" id="convertBtn" title="Habar matnini qabul qilish">
-                <span>📥</span> Matin qil
-            </button>
-        </div>
+<script>
+    const startBtn = document.getElementById('start-btn');
+    const resultArea = document.getElementById('result');
+    const statusText = document.getElementById('status');
 
-        <!-- NATIJA (MATIN) QUTISI -->
-        <div class="output-header">
-            <h2>
-                <i>📄</i> Matin (natija)
-            </h2>
-            <div class="chip" id="wordCount">0 so‘z</div>
-        </div>
-        <div class="message-box" id="outputMessage" aria-live="polite"></div>
+    // Brauzer qo'llab-quvvatlashini tekshirish
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        <!-- QO‘SHIMCHA AMALLAR -->
-        <div class="row-flex">
-            <div class="status-note">
-                <span>✅</span> Ovzli habar — matin ko‘rinishida qabul qilindi
-            </div>
-            <button class="btn-copy" id="copyBtn" title="Matinni nusxalash">
-                <span>📋</span> Nusxalash
-            </button>
-        </div>
+    if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'uz-UZ'; // O'zbek tili sozlamasi
+        recognition.interimResults = false; // Faqat yakuniy natijani olish
 
-        <div class="footer-copy">
-            ⚡ Har qanday ovzli (so‘zli) xabar oddiy matnga aylanadi. Yangi xabarni darhol ko‘rasiz.
-        </div>
-    </div>
+        startBtn.addEventListener('click', () => {
+            recognition.start();
+        });
 
-    <script>
-        (function() {
-            const textarea = document.getElementById('inputMessage');
-            const outputDiv = document.getElementById('outputMessage');
-            const charSpan = document.getElementById('charCount');
-            const wordSpan = document.getElementById('wordCount');
-            const convertBtn = document.getElementById('convertBtn');
-            const clearBtn = document.getElementById('clearBtn');
-            const copyBtn = document.getElementById('copyBtn');
+        recognition.onstart = () => {
+            statusText.innerText = "Sizni eshityapman...";
+            startBtn.classList.add('recording');
+            startBtn.innerText = "Yozilmoqda...";
+        };
 
-            // --- yordamchi funksiyalar: so‘z va belgi hisoblash ---
-            function countWords(str) {
-                return str.trim() === '' ? 0 : str.trim().split(/\s+/).length;
-            }
+        recognition.onspeechend = () => {
+            recognition.stop();
+            statusText.innerText = "Tahlil qilinmoqda...";
+            startBtn.classList.remove('recording');
+            startBtn.innerText = "Ovozni yozishni boshlash";
+        };
 
-            function updateCounters() {
-                const txt = textarea.value;
-                const chars = txt.length;
-                charSpan.textContent = chars + ' belgi';
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            resultArea.value += transcript + " ";
+            statusText.innerText = "Tayyor!";
+        };
 
-                // matin (output) so‘zlarini ham chiroyli ko‘rsatamiz
-                const outputText = outputDiv.innerText;
-                const wCount = outputText.trim() === '' ? 0 : outputText.trim().split(/\s+/).length;
-                wordSpan.textContent = wCount + ' so‘z';
-            }
+        recognition.onerror = (event) => {
+            statusText.innerText = "Xatolik yuz berdi: " + event.error;
+            startBtn.classList.remove('recording');
+        };
 
-            // --- asosiy konvertatsiya: textarea qiymatini outputga ko‘chirish ---
-            function convertToMatin() {
-                let rawText = textarea.value;
+    } else {
+        alert("Kechirasiz, brauzeringiz ushbu funksiyani qo'llab-quvvatlamaydi. Chrome'dan foydalanib ko'ring.");
+    }
+</script>
 
-                // Agar bo‘sh bo‘lsa, foydalanuvchiga eslatma qoldiramiz, lekin bo‘sh matn ham qabul qilinadi (mantiqan to‘g‘ri)
-                // Lekin "matin" bo‘sh bo‘lsa ham ko‘rsatamiz, div:empty stillari ishlaydi
-                outputDiv.innerText = rawText;  // oddiy matn qilib qo‘yadi (barcha formatlarsiz)
-                // Qo‘shimcha: Ixtiyoriy ravishda kirishdagi satr uzilishlari saqlanadi — innerText va textContent o‘xshash
-
-                // So‘z va belgilarni yangilash
-                updateCounters();
-
-                // Agar xohlasak, ozgina jonlantirish (fokus effekti)
-                outputDiv.style.transition = 'background 0.2s';
-                outputDiv.style.background = '#f0f7ff';
-                setTimeout(() => {
-                    outputDiv.style.background = '';  // asliga qaytadi (CSS dagi #eef2f5)
-                }, 180);
-            }
-
-            // --- tozalash funksiyasi ---
-            function clearAll() {
-                textarea.value = '';
-                outputDiv.innerText = '';   // bo‘sh matn
-                updateCounters();
-                textarea.focus();
-            }
-
-            // --- nusxalash (copy) faqat output matnini ---
-            function copyOutput() {
-                const textToCopy = outputDiv.innerText;
-                if (!textToCopy || textToCopy.trim() === '') {
-                    alert('Matin bo‘sh, nusxalash uchun avval xabar kiriting.');
-                    return;
-                }
-
-                // Zamonaviy clipboard API
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        // muvaffaqiyatli
-                        const originalText = copyBtn.innerHTML;
-                        copyBtn.innerHTML = '<span>✅</span> Nusxalandi';
-                        setTimeout(() => {
-                            copyBtn.innerHTML = '<span>📋</span> Nusxalash';
-                        }, 1300);
-                    }).catch(() => {
-                        alert('Nusxalash amalga oshmadi, qo‘lda belgilab oling.');
-                    });
-                } else {
-                    // fallback
-                    try {
-                        const textArea = document.createElement('textarea');
-                        textArea.value = textToCopy;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textArea);
-                        const originalText = copyBtn.innerHTML;
-                        copyBtn.innerHTML = '<span>✅</span> Nusxalandi';
-                        setTimeout(() => {
-                            copyBtn.innerHTML = '<span>📋</span> Nusxalash';
-                        }, 1300);
-                    } catch (err) {
-                        alert('Nusxalash imkonsiz, matnni belgilab oling.');
-                    }
-                }
-            }
-
-            // ---- voqealar (event listeners) ----
-            convertBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                convertToMatin();
-            });
-
-            clearBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                clearAll();
-            });
-
-            copyBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                copyOutput();
-            });
-
-            // Texnik: Har bir kiritishda belgi sonini yangilash, shuningdek so‘zlar hisobi (ixtiyoriy)
-            textarea.addEventListener('input', function() {
-                const chars = textarea.value.length;
-                charSpan.textContent = chars + ' belgi';
-                // istasak outputga avtomatik ko‘chirilmasin, faqat tugma bosilganda. 
-                // Ammo agar hohlasak realtime, lekin talab: "yuborsam menga matin qilib beradigan" -> tugma orqali qilish ma'qul.
-                // Biz faqat hisoblagichni yangilaymiz.
-            });
-
-            // Agar dastlabki namuna bo‘lsa, uni outputga ham joylaymiz (sahifa yuklanganda)
-            window.addEventListener('load', function() {
-                // Dastlabki matnni (textarea ichida bor) "matin" qilish shart emas, lekin foydalanuvchi ko‘rishi uchun namuna sifatida output bo‘sh.
-                // lekin xohlasak yuklanganda avtomatik chiroy bo‘ladi: avtomatik convert qilmasdan, faqat hisoblagichlarni yangilaymiz.
-                // Agar istagan bo‘lsangiz yuklanganda ham matinni chiqarish: 
-                // convertToMatin();  // agar xohlasangiz ushbu qatorni faollashtiring
-                // Men faollashtirmayman, chunki foydalanuvchi «Matin qil» tugmasini bosishi kerak.
-                // Lekin ishlatish qulay bo‘lishi uchun outputDiv da "bo‘sh" degan xabar chiqadi — yaxshi.
-                updateCounters(); // boshlang‘ich holat: output bo‘sh, wordCount 0 bo‘ladi
-            });
-
-            // qo‘shimcha: agar foydalanuvchi enter tugmasi bilan tezlashtirish (ixtiyoriy)
-            textarea.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                    e.preventDefault();
-                    convertToMatin();
-                }
-            });
-
-            // hover va boshqa effektlar uchun hech qanday maxsus narsa kerak emas.
-
-            // agar outputni o‘chirish uchun konvertatsiya bo‘lsa, updateCounters convert ichida chaqirilgan.
-
-            // So‘zlar va belgilar output o‘zgarganda ham yangilanishi kerak. 
-            // Masalan nusxalash hech narsani o‘zgartirmaydi. Clear va convert ishlaydi.
-
-            // QO‘SHIMCHA: outputDiv ichidagi o‘zgarishlarni kuzatish uchun MutationObserver ishlatsa bo‘ladi, lekin convert va clear dan keyin updateCounters ishlayapti, shu yetarli.
-            // Agar boshqa yerda o‘zgarish bo‘lsa (masalan, user tomonidan), yo‘q.
-
-            // Yana bir kichik qulaylik: Tozalash tugmasi outputni ham tozalaydi, matin qilganda output yoziladi.
-        })();
-    </script>
 </body>
 </html>
